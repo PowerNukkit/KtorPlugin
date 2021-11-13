@@ -1,10 +1,10 @@
 # Required
 # The final name of your plugin, other plugins may use this name to declare dependency on your plugin
-name: KotlinLib
+name: KtorLib
 
 # Required
 # The name of your class file that overrides PluginBase
-main: org.powernukkit.plugins.kotlin.KotlinPlugin
+main: org.powernukkit.plugins.ktor.KtorPlugin
 
 # Required
 # The version of your plugin, it's recommended to follow the https://semver.org/ standard
@@ -27,17 +27,17 @@ author: PowerNukkit
 
 # Optional
 # Explain in few words what this plugin does
-description: Provides Kotlin libs and some features for building Kotlin plugins
+description: Provides Ktor libs for building Kotlin plugins that needs to provide embedded HTTP servers
 
 # Optional
 # A link where the admins can find more info about your plugin
-website: https://github.com/PowerNukkit/KotlinPlugin
+website: https://github.com/PowerNukkit/KtorPlugin
 
 # Optional
 # A list of plugins that are required to use this plugin
 # You should keep the PowerNukkit in the list if your plugin requires PowerNukkit features to work properly
-#depend:
-# - PowerNukkit
+depend:
+ - KotlinPlugin
  
 # Optional
 # A list of plugins that should be loaded before, if your plugin works fine with PowerNukkit, keep it in this list

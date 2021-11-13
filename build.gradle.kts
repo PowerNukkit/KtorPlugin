@@ -11,25 +11,14 @@ plugins {
 }
 
 val powerNukkitVersion: String by project
-val kotlinVersion: String by project
-val kotlinxSerializationVersion: String by project
-val kotlinxCoroutinesVersion: String by project
 val ktorVersion: String by project
-val kotlinxCollectionsImmutableVersion: String by project
-val kotlinxDateTimeVersion: String by project
-val kamlVersion: String by project
-val knbtVersion: String by project
-val inlineLoggerVersion: String by project
-val slf4jVersion: String by project
-val jetbrainsAnnotationsVersion: String by project
-val okioVersion: String by project
-val log4jSlf4jImplVersion: String by project
+val kotlinPluginVersion: String by project
 val ossrhUsername: String by project
 val ossrhPassword: String by project
 
 group = "org.powernukkit.plugins"
 val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))!!
-version = "$kotlinVersion+0.1.0+${cal[Calendar.YEAR]}.${cal[Calendar.MONTH]+1}.${cal[Calendar.DAY_OF_MONTH]}-SNAPSHOT"
+version = "$ktorVersion+0.1.0+${cal[Calendar.YEAR]}.${cal[Calendar.MONTH]+1}.${cal[Calendar.DAY_OF_MONTH]}-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -39,44 +28,13 @@ val included by configurations.creating
 
 dependencies {
     implementation("org.powernukkit:powernukkit:$powerNukkitVersion")
-    includedApi("org.slf4j:slf4j-api:$slf4jVersion")
-    includedImplementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jSlf4jImplVersion") {
-        exclude("org.apache.logging.log4j", "log4j-core")
-        exclude("org.apache.logging.log4j", "log4j-api")
-    }
-    includedApi("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    includedApi(kotlin("stdlib", kotlinVersion))
-    includedApi(kotlin("stdlib-jdk7", kotlinVersion))
-    includedApi(kotlin("stdlib-jdk8", kotlinVersion))
-    includedApi(kotlin("reflect", kotlinVersion))
-    includedApi(kotlinx("coroutines-core", kotlinxCoroutinesVersion))
-    includedApi(kotlinx("serialization-core", kotlinxSerializationVersion))
-    includedApi(kotlinx("serialization-json", kotlinxSerializationVersion))
-    includedApi(kotlinx("serialization-protobuf", kotlinxSerializationVersion))
-    includedApi(kotlinx("serialization-cbor", kotlinxSerializationVersion))
-    includedApi(kotlinx("serialization-properties", kotlinxSerializationVersion))
-    includedApi("com.squareup.okio:okio:$okioVersion")
-    includedApi("net.benwoodworth.knbt:knbt:$knbtVersion")
-    includedApi("com.charleskorn.kaml:kaml:$kamlVersion") {
-        exclude("org.snakeyaml", "snakeyaml-engine")
-    }
-    includedApi(kotlinx("datetime", kotlinxDateTimeVersion))
-    includedApi(kotlinx("collections-immutable", kotlinxCollectionsImmutableVersion))
-    includedApi("io.ktor:ktor-io:$ktorVersion")
-    includedApi("io.ktor:ktor-utils:$ktorVersion")
-    includedApi("io.ktor:ktor-network:$ktorVersion")
-    includedApi("io.ktor:ktor-network-tls:$ktorVersion")
-    includedApi("io.ktor:ktor-http:$ktorVersion")
-    includedApi("io.ktor:ktor-http-cio:$ktorVersion")
-    includedApi("io.ktor:ktor-client-core:$ktorVersion")
-    includedApi("io.ktor:ktor-client-cio:$ktorVersion")
-    includedApi("io.ktor:ktor-client-auth:$ktorVersion")
-    includedApi("io.ktor:ktor-client-json:$ktorVersion")
-    includedApi("io.ktor:ktor-client-gson:$ktorVersion") {
-        exclude("com.google.code.gson", "gson")
-    }
-    includedApi("io.ktor:ktor-client-serialization:$ktorVersion")
-    includedApi("com.michael-bull.kotlin-inline-logger:kotlin-inline-logger:$inlineLoggerVersion")
+    api("org.powernukkit.plugins:kotlin-plugin-lib:$kotlinPluginVersion")
+    includedApi(ktor("ktor-server-core"))
+    includedApi(ktor("ktor-server-cio"))
+    includedApi(ktor("ktor-serialization"))
+    includedApi(ktor("ktor-auth"))
+    includedApi(ktor("ktor-metrics-micrometer"))
+    includedApi("io.micrometer:micrometer-registry-prometheus:1.7.1")
 }
 
 kotlin {
@@ -147,7 +105,7 @@ publishing {
 
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = "kotlin-plugin-lib"
+            artifactId = "ktor-plugin-lib"
             from(components["java"])
             artifact(dokkaHtmlJar)
             versionMapping {
@@ -159,13 +117,13 @@ publishing {
                 }
             }
             pom {
-                name.set("PowerNukkit Kotlin Plugin Library")
-                description.set("Provides Kotlin libs and some features for building Kotlin plugins")
-                url.set("https://github.com/PowerNukkit/KotlinPlugin")
+                name.set("PowerNukkit Ktor Plugin Library")
+                description.set("Provides Ktor Server libs for building awesome Kotlin plugins which needs to provide builtin HTTP servers.")
+                url.set("https://github.com/PowerNukkit/KtorPlugin")
                 inceptionYear.set("2021")
                 packaging = "jar"
                 issueManagement {
-                    url.set("https://github.com/PowerNukkit/KotlinPlugin/issues")
+                    url.set("https://github.com/PowerNukkit/KtorPlugin/issues")
                     system.set("GitHub")
                 }
                 organization {
@@ -186,9 +144,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/PowerNukkit/KotlinPlugin.git")
-                    developerConnection.set("scm:git:ssh://github.com/PowerNukkit/KotlinPlugin.git")
-                    url.set("https://github.com/PowerNukkit/KotlinPlugin")
+                    connection.set("scm:git:git://github.com/PowerNukkit/KtorPlugin.git")
+                    developerConnection.set("scm:git:ssh://github.com/PowerNukkit/KtorPlugin.git")
+                    url.set("https://github.com/PowerNukkit/KtorPlugin")
                 }
             }
         }
@@ -240,6 +198,7 @@ fun DependencyHandlerScope.includedImplementation(
 }
 
 fun kotlinx(name: String, version: String) = "org.jetbrains.kotlinx:kotlinx-$name:$version"
+fun ktor(name: String, version: String = ktorVersion) = "io.ktor:ktor-$name:$version"
 
 
 ///////////////////////////////////////////////////////////////////
