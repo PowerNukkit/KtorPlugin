@@ -22,6 +22,7 @@ version = "$ktorVersion+0.1.0+${cal[Calendar.YEAR]}.${cal[Calendar.MONTH]+1}.${c
 
 repositories {
     mavenCentral()
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 val included by configurations.creating
@@ -29,11 +30,11 @@ val included by configurations.creating
 dependencies {
     implementation("org.powernukkit:powernukkit:$powerNukkitVersion")
     api("org.powernukkit.plugins:kotlin-plugin-lib:$kotlinPluginVersion")
-    includedApi(ktor("ktor-server-core"))
-    includedApi(ktor("ktor-server-cio"))
-    includedApi(ktor("ktor-serialization"))
-    includedApi(ktor("ktor-auth"))
-    includedApi(ktor("ktor-metrics-micrometer"))
+    includedApi(ktor("server-core"))
+    includedApi(ktor("server-cio"))
+    includedApi(ktor("serialization"))
+    includedApi(ktor("auth"))
+    includedApi(ktor("metrics-micrometer"))
     includedApi("io.micrometer:micrometer-registry-prometheus:1.7.1")
 }
 
